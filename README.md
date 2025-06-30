@@ -17,7 +17,7 @@ Features
 <br />
 <div align="center">
   <a href="https://github.com/akassama/codeigniter-file-manager">
-    <img src="public/images/screenshot.png" alt="Logo" width="1200" height="900">
+    <img src="public/images/screenshot.png" alt="Logo" width="900" height="600">
   </a>
 </div>
 
