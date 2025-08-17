@@ -363,6 +363,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="ciFileManagerModal2">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">

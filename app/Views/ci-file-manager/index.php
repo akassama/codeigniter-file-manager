@@ -184,6 +184,9 @@ function cifActionLinks($extension, $file_name, $file_path, $file_preview_url, $
         // Escape backslashes for JavaScript compatibility
         $escaped_path = str_replace('\\', '\\\\', $file_path);
         $escaped_file_preview_url = str_replace('\\', '\\\\', $file_preview_url);
+        $escaped_full_url = $escaped_file_preview_url.$file_name;
+        $base_url = base_url();
+        $relative_url_path = str_replace($base_url,"",$escaped_full_url);
 
         $editFileIconBtn = '';
         $deleteFileIconBtn = '';
@@ -197,8 +200,11 @@ function cifActionLinks($extension, $file_name, $file_path, $file_preview_url, $
         }
 
         return ''.$editFileIconBtn.'
-                <button class="action-btn link" data-tippy-content="Get link" onclick="copyFilePath(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
+                <button class="action-btn link" data-tippy-content="Get link" onclick="copyRelativeFilePath(\'' . $relative_url_path . '\')">
                     <i class="ri-link"></i>
+                </button>
+                <button class="action-btn link" data-tippy-content="Get link" onclick="copyFilePath(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
+                    <i class="ri-external-link-line"></i>
                 </button>
                 <button class="action-btn download" data-tippy-content="Download file" onclick="downloadFileUrl(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
                     <i class="ri-download-2-line"></i>
@@ -1075,6 +1081,29 @@ function cifGenerateFileManagerTable(
                     });
                 }
             });
+        }
+        
+        // Show Copy Success Toast
+        function copyRelativeFilePath(filePreviewUrl) {
+            // Create a temporary input element
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-1000px'; // Move off-screen
+            tempInput.value = filePreviewUrl ;
+
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                document.execCommand('copy');
+                toastr.success('Copied to clipboard!', 'Success');
+            } catch (err) {
+                toastr.error('Failed to copy URL', 'Error');
+                console.error('Copy failed:', err);
+            }
+
+            document.body.removeChild(tempInput);
         }
         
         // Show Copy Success Toast
