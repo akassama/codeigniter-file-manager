@@ -191,22 +191,22 @@ function cifActionLinks($extension, $file_name, $file_path, $file_preview_url, $
         $editFileIconBtn = '';
         $deleteFileIconBtn = '';
         if (!boolval($filterQuery)){
-            $editFileIconBtn = '<button class="action-btn edit" data-tippy-content="Edit file/tags" onclick="showEditModal(\'' . $escaped_path . '\', \'' . $file_name . '\')">
+            $editFileIconBtn = '<button class="action-btn edit" data-bs-toggle="tooltip" title="Edit file/tags" onclick="showEditModal(\'' . $escaped_path . '\', \'' . $file_name . '\')">
                         <i class="ri-edit-line"></i>
                     </button>';
-            $deleteFileIconBtn = '<button class="action-btn delete" data-tippy-content="Delete file" onclick="confirmDelete(\'' . $escaped_path . '\', \'' . $file_name . '\')">
+            $deleteFileIconBtn = '<button class="action-btn delete" data-bs-toggle="tooltip" title="Delete file" onclick="confirmDelete(\'' . $escaped_path . '\', \'' . $file_name . '\')">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>';
         }
 
         return ''.$editFileIconBtn.'
-                <button class="action-btn link" data-tippy-content="Get link" onclick="copyRelativeFilePath(\'' . $relative_url_path . '\')">
+                <button class="action-btn link" data-bs-toggle="tooltip" title="Get relative link" onclick="copyRelativeFilePath(\'' . $relative_url_path . '\')">
                     <i class="ri-link"></i>
                 </button>
-                <button class="action-btn link" data-tippy-content="Get link" onclick="copyFilePath(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
+                <button class="action-btn link" data-bs-toggle="tooltip" title="Get link" onclick="copyFilePath(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
                     <i class="ri-external-link-line"></i>
                 </button>
-                <button class="action-btn download" data-tippy-content="Download file" onclick="downloadFileUrl(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
+                <button class="action-btn download" data-bs-toggle="tooltip" title="Download file" onclick="downloadFileUrl(\'' . $escaped_file_preview_url . '\', \'' . $file_name . '\')">
                     <i class="ri-download-2-line"></i>
                 </button>
                 '.$deleteFileIconBtn.'';
@@ -401,19 +401,19 @@ function cifGenerateFileManagerTable(
                                 </div>
                             </td>
                             <td>
-                                <div class=\"file-name preview-image-div\" data-preview-image=\"{$preview}\">
+                                <div class=\"file-name preview-image-div\" data-preview-image=\"{$preview}\" data-bs-toggle='tooltip' title='File name: {$fileNameLink}'>
                                     {$icon}
                                     <span>{$fileNameLink}</span>
                                 </div>
                             </td>
-                            <td>{$size}</td>
-                            <td>{$extension}</td>
-                            <td>{$owner}</td>
-                            <td>{$created}</td>
-                            <td>{$dimensions}</td>
-                            <td>{$tags}</td>
-                            <td>{$date}</td>
-                            <td>{$perm}</td>
+                            <td data-bs-toggle='tooltip' title='File size: {$size}'>{$size}</td>
+                            <td data-bs-toggle='tooltip' title='File type: {$extension}'>{$extension}</td>
+                            <td data-bs-toggle='tooltip' title='File owner: {$owner}'>{$owner}</td>
+                            <td data-bs-toggle='tooltip' title='Created on: {$created}'>{$created}</td>
+                            <td data-bs-toggle='tooltip' title='File deminsion: {$dimensions} PX'>{$dimensions}</td>
+                            <td data-bs-toggle='tooltip' title='File tags: {$tags}'>{$tags}</td>
+                            <td data-bs-toggle='tooltip' title='Last modified on: {$date}'>{$date}</td>
+                            <td data-bs-toggle='tooltip' title='File permissions: {$perm}'>{$perm}</td>
                             <td>{$actionLinks}</td>
                         </tr>";
         }
@@ -880,6 +880,12 @@ function cifGenerateFileManagerTable(
         echo AssetManager::includeJs('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js');
         echo AssetManager::includeJs('https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js');
     ?>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 
     <script>
         $( document ).ready(function() {
@@ -888,6 +894,32 @@ function cifGenerateFileManagerTable(
                 theme: 'dark',
                 animation: 'scale',
                 delay: [200, 0]
+            });
+
+            //tippy js
+            tippy(".copy-btn-label", {
+            content: "Click to copy file name",
+            placement: "top",
+            });
+            tippy(".copy-path-label", {
+            content: "Click to copy file path",
+            placement: "top",
+            });
+            tippy(".download-btn", {
+            content: "Download",
+            placement: "top",
+            });
+            tippy(".edit-file", {
+            content: "Edit file data",
+            placement: "top",
+            });
+            tippy(".remove-file", {
+            content: "Remove file",
+            placement: "top",
+            });
+            tippy(".reload-files", {
+            content: "Reload file manger",
+            placement: "top",
             });
             
             // Configure Toastr
